@@ -1,18 +1,14 @@
 -General-
-Testing needed?
 Ensure color schema works
 
 -Maps-
-Embed Google Maps
 Request users location
-Get users click location coordinates
+Spinner while map is loading
 
 -RainData-
 Query API
 Get results through reducer
 Display Data in graph
 Display data in table?
-Loading spinner
+Loading spinner while data is being looked up
 Eror message
-
-Google maps API KEY: AIzaSyDJulwRv3niiI-1lW6E8FxboaJ_DfnidcA

@@ -55,7 +55,7 @@ class App extends Component {
       <MuiThemeProvider muiTheme={getTheme()}>
         <div className="App">
           <AppBar
-            title="Title"
+            title="Rainfall Explorer"
             showMenuIconButton={false}
             iconElementRight={<IconButton><InfoOutline /></IconButton>}
           />

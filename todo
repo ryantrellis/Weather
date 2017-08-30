@@ -1,9 +1,8 @@
 -General-
 Ensure color schema works
+Info button
 
 -Maps-
-Request users location
-Spinner while map is loading
 
 -RainData-
 Query API

@@ -1,4 +1,4 @@
-# WeatherMan
+# Rainfall Monitoring App
 
 **Design decisions**
 

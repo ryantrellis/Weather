@@ -18,11 +18,16 @@ class App extends Component {
     super(props);
     this.state = {
       viewingData: false,
+      location: {
+        lat: 0,
+        lng: 0,
+      },
     };
 
-    this.viewData = () => {
+    this.viewData = (location) => {
       this.setState(() => ({
         viewingData: true,
+        location,
       }));
     };
 
@@ -34,12 +39,17 @@ class App extends Component {
   }
 
   render() {
-    let screenToDisplay = null;
-    const viewingData = this.state.viewingData;
+    const { viewingData } = this.state;
+    let dataView = '';
     if (viewingData) {
-      screenToDisplay = <RainData returnToMap={this.viewMap} />;
-    } else {
-      screenToDisplay = <Map locationPicked={this.viewData} />;
+      dataView = (
+        <div className="Screen">
+          <RainData
+            returnToMap={this.viewMap}
+            location={this.state.location}
+          />
+        </div>
+      );
     }
     return (
       <MuiThemeProvider muiTheme={getTheme()}>
@@ -50,8 +60,9 @@ class App extends Component {
             iconElementRight={<IconButton><InfoOutline /></IconButton>}
           />
           <div className="Screen">
-            {screenToDisplay}
+            <Map locationPicked={this.viewData} />
           </div>
+          {dataView}
         </div>
       </MuiThemeProvider>
     );

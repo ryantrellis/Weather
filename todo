@@ -1,10 +1,6 @@
 -General-
 Testing needed?
-Google Analytics?
 Ensure color schema works
-Add Favicon
-Change Title
-Host on gh-pages
 
 -Maps-
 Embed Google Maps
@@ -18,3 +14,5 @@ Display Data in graph
 Display data in table?
 Loading spinner
 Eror message
+
+Google maps API KEY: AIzaSyDJulwRv3niiI-1lW6E8FxboaJ_DfnidcA

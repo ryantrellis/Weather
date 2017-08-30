@@ -8,3 +8,11 @@ script:
   - npm run lint
   - npm run build
   - npm test
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  local_dir: build
+  repo: rynobax/Weather
+  on:
+    branch: master

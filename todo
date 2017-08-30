@@ -1,2 +1,17 @@
-Add some todos
-Trigger Travis CI
+-General-
+Testing needed?
+Google Analytics?
+Ensure color schema works
+
+-Maps-
+Embed Google Maps
+Request users location
+Get users click location coordinates
+
+-RainData-
+Query API
+Get results through reducer
+Display Data in graph
+Display data in table?
+Loading spinner
+Eror message

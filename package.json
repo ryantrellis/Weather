@@ -94,8 +94,5 @@
       "react-app"
     ]
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
   "homepage": "https://rynobax.github.io/Weather"
 }

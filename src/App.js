@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import AppBar from 'material-ui/AppBar';
+import InfoOutline from 'material-ui/svg-icons/action/info-outline';
+import IconButton from 'material-ui/IconButton';
+
 import './App.css';
 import RainData from './RainData/RainData';
 import Map from './Map/Map';
@@ -37,6 +41,11 @@ class App extends Component {
     }
     return (
       <div className="App">
+        <AppBar
+          title="Title"
+          showMenuIconButton={false}
+          iconElementRight={<IconButton><InfoOutline /></IconButton>}
+        />
         <div className="Screen">
           {screenToDisplay}
         </div>

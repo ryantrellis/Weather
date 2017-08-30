@@ -13,3 +13,4 @@ I plan to keep the UI simple:
 - Individual data points will be easy to see by mousing over the individual points on desktop.
 -- Maybe on mobile the users can press the data point, and a header will appear with the point data.
 -- Alternatively, there could be one tab for the graph and another for the data in a table.
+Using AirBnb style guide because it is very comprehensive.

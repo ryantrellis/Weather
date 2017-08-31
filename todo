@@ -1,5 +1,5 @@
 -General-
-Ensure color schema works
+Review color scheme
 Info button
 Figure out why material-ui causes app to crash in Jest
 
@@ -11,5 +11,4 @@ Ensure API Keys won't run out
 
 Test Actions and Reducers
 
-Display Data in graph
-Display data in table?
+Deal with clicking on the ocean

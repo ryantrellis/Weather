@@ -35,10 +35,11 @@ function RainData({ returnToMap, isFetching, locationData, error, muiTheme }) {
     );
   } else {
     content = (
-      <div style={{ height: '100%', width: '100%', display: 'flex', flexDirection: 'column' }}>
-        <h2 style={{ textAlign: 'center', fontFamily }}>{locationData.city}</h2>
-        <RainDataGraph />
-      </div>
+      <RainDataGraph
+        style={{ height: '100%', width: '100%', display: 'flex', flexDirection: 'column' }}
+        hourlyData={locationData.hourlyData}
+        city={locationData.city}
+      />
     );
   }
 

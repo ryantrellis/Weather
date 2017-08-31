@@ -30,9 +30,7 @@ function errorRainData(coordinates, error) {
 
 /* Schema for return result
 {
-  month: {
-    day: Number
-  }
+  YYYYMMDD: Number
 } */
 
 function mergePrecip(a, b) {

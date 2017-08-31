@@ -24,32 +24,38 @@ class RainDataGraph extends Component {
   constructor(props) {
     super(props);
 
+    this.lineFormat = {
+      type: 'scatter',
+      mode: 'lines+markers',
+      line: {
+        dash: 'dash',
+        width: 1,
+      },
+      marker: {
+        size: 8,
+      },
+    };
+
     this.getData = (nextProps) => {
       const { hourlyData, unitInfo } = nextProps;
-      return Object.assign({},
+      return Object.assign(
+        {},
         convertDataForPlotly(hourlyData, unitInfo.multiplyer),
-        this.format);
+        this.lineFormat,
+      );
     };
 
     this.resizePlot = () => {
       Plotly.Plots.resize(this.graphDiv);
     };
 
-    this.getPlotLayout = (nextProps) => {
-      const { city, unitInfo } = nextProps;
+    this.initPlotLayout = () => {
       const today = moment()
         .hour(0)
         .minute(0)
         .second(0)
         .format();
       return {
-        title: city ? `Rainfall in ${city}` : 'Rainfall',
-        xaxis: {
-        },
-        yaxis: {
-          title: `Daily Rainfall (${unitInfo.text})`,
-          hoverformat: '.2f',
-        },
         shapes: [{
           type: 'line',
           x0: today,
@@ -73,27 +79,33 @@ class RainDataGraph extends Component {
       };
     };
 
-    this.format = {
-      type: 'scatter',
-      mode: 'lines+markers',
-      line: {
-        dash: 'dash',
-        width: 1,
-      },
-      marker: {
-        size: 8,
-      },
+    this.getPlotLayout = (nextProps) => {
+      const { city, unitInfo } = nextProps;
+      return {
+        title: city ? `Rainfall in ${city}` : 'Rainfall',
+        yaxis: {
+          title: `Daily Rainfall (${unitInfo.text})`,
+          hoverformat: '.2f',
+        },
+      };
+    };
+
+    this.updatePlot = (nextProps) => {
+      Plotly.deleteTraces(this.graphDiv, 0);
+      Plotly.relayout(this.graphDiv, this.getPlotLayout(nextProps));
+      Plotly.addTraces(this.graphDiv, [this.getData(nextProps)]);
     };
   }
 
   componentDidMount() {
-    Plotly.newPlot(this.graphDiv, [this.getData(this.props)], this.getPlotLayout(this.props));
+    Plotly.newPlot(this.graphDiv, [this.getData(this.props)], this.initPlotLayout());
+    // Update immediatly it to get axis to scale properly
+    this.updatePlot(this.props);
     window.addEventListener('resize', this.resizePlot);
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('newData: ', this.getData(nextProps));
-    Plotly.newPlot(this.graphDiv, this.getData(nextProps), this.getPlotLayout(nextProps));
+    this.updatePlot(nextProps);
   }
 
   componentWillUnmount() {

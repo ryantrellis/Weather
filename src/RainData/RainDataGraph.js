@@ -4,7 +4,7 @@ import moment from 'moment';
 
 const Plotly = window.Plotly;
 
-function convertDataForPlotly(data) {
+function convertDataForPlotly(data, multiplyer) {
   /* Schema in redux
   {
     YYYYMMDD: Number
@@ -13,7 +13,9 @@ function convertDataForPlotly(data) {
   Object.keys(data).forEach((key) => {
     const date = moment(key, 'YYYYMMDD');
     o.x.push(date.format());
-    o.y.push(data[key]);
+
+    // Adjust unit with multiplyer
+    o.y.push(data[key] * multiplyer);
   });
   return o;
 }
@@ -21,36 +23,54 @@ function convertDataForPlotly(data) {
 class RainDataGraph extends Component {
   constructor(props) {
     super(props);
-    const { city } = this.props;
-    this.updateGraph = () => {
+
+    this.getData = (nextProps) => {
+      const { hourlyData, unitInfo } = nextProps;
+      return Object.assign({},
+        convertDataForPlotly(hourlyData, unitInfo.multiplyer),
+        this.format);
+    };
+
+    this.resizePlot = () => {
       Plotly.Plots.resize(this.graphDiv);
     };
 
-    const today = moment()
-      .hour(0)
-      .minute(0)
-      .second(0)
-      .format();
-    this.layout = {
-      title: city ? `Rainfall in ${city}` : 'Rainfall',
-      xaxis: {
-      },
-      yaxis: {
-        title: 'Daily Rainfall in MM',
-      },
-      shapes: [{
-        type: 'line',
-        x0: today,
-        x1: today,
-        yref: 'paper',
-        y0: 0.05, // Stop at x axis
-        y1: 1,
-        line: {
-          color: 'grey',
-          width: 3,
-          dash: 'dot',
+    this.getPlotLayout = (nextProps) => {
+      const { city, unitInfo } = nextProps;
+      const today = moment()
+        .hour(0)
+        .minute(0)
+        .second(0)
+        .format();
+      return {
+        title: city ? `Rainfall in ${city}` : 'Rainfall',
+        xaxis: {
         },
-      }],
+        yaxis: {
+          title: `Daily Rainfall (${unitInfo.text})`,
+          hoverformat: '.2f',
+        },
+        shapes: [{
+          type: 'line',
+          x0: today,
+          x1: today,
+          yref: 'paper',
+          y0: 0.05, // Stop at x axis
+          y1: 1,
+          line: {
+            color: 'grey',
+            width: 3,
+            dash: 'dot',
+          },
+        }],
+        margin: {
+          l: 64,
+          r: 0,
+          b: 0,
+          t: 100,
+          pad: 4,
+        },
+      };
     };
 
     this.format = {
@@ -67,16 +87,17 @@ class RainDataGraph extends Component {
   }
 
   componentDidMount() {
-    const { hourlyData } = this.props;
-    const data = Object.assign({}, convertDataForPlotly(hourlyData), this.format);
-    console.log('data: ', data);
+    Plotly.newPlot(this.graphDiv, [this.getData(this.props)], this.getPlotLayout(this.props));
+    window.addEventListener('resize', this.resizePlot);
+  }
 
-    Plotly.newPlot(this.graphDiv, [data], this.layout);
-    window.addEventListener('resize', this.updateGraph);
+  componentWillReceiveProps(nextProps) {
+    console.log('newData: ', this.getData(nextProps));
+    Plotly.newPlot(this.graphDiv, this.getData(nextProps), this.getPlotLayout(nextProps));
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.updateGraph);
+    window.removeEventListener('resize', this.resizePlot);
   }
 
   render() {
@@ -92,6 +113,10 @@ class RainDataGraph extends Component {
 RainDataGraph.propTypes = {
   hourlyData: PropTypes.objectOf(PropTypes.number.isRequired).isRequired,
   city: PropTypes.string.isRequired,
+  unitInfo: PropTypes.shape({
+    multiplyer: PropTypes.number.isRequired,
+    text: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default RainDataGraph;

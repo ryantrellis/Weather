@@ -44,7 +44,7 @@ function mergePrecip(a, b) {
 
 function fetchForecast(coordinates) {
   const { lat, lng } = coordinates;
-  const url = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lng}&appid=4a9392bb837a99ef8b64347ed48199ee`;
+  const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lng}&appid=4a9392bb837a99ef8b64347ed48199ee`;
   return fetch(url)
     .then((response) => {
       if (!response.ok) {

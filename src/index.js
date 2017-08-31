@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
+import { createLogger } from 'redux-logger';
 
 import './index.css';
 import App from './App';
@@ -11,11 +12,15 @@ import reducers from './reducers';
 
 require('typeface-roboto');
 
+const loggerMiddleware = createLogger();
+
+const middlewares = [];
+middlewares.push(thunkMiddleware);
+if (process.env.NODE_ENV === 'development') middlewares.push(loggerMiddleware);
+
 const store = createStore(
   reducers,
-  applyMiddleware(
-    thunkMiddleware,
-  ),
+  applyMiddleware(...middlewares),
 );
 
 ReactDOM.render(

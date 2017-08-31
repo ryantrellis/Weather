@@ -5,9 +5,8 @@ Info button
 -Maps-
 
 -RainData-
-Query API
-Get results through reducer
+Figure out how to balance out rainfall on the current time
+Ensure API Keys won't run out
+
 Display Data in graph
 Display data in table?
-Loading spinner while data is being looked up
-Eror message

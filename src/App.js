@@ -5,7 +5,7 @@ import IconButton from 'material-ui/IconButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import './App.css';
-import RainData from './RainData/RainData';
+import RainData from './RainData/RainDataContainer';
 import Map from './Map/Map';
 import getTheme from './theme';
 

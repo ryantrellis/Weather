@@ -76,8 +76,8 @@ class Map extends Component {
     /* Event Handlers */
     map.addListener('click', ({ latLng }) => {
       locationPicked({
-        lat: latLng.lat(),
-        lng: latLng.lng(),
+        lat: latLng.lat().toFixed(2),
+        lng: latLng.lng().toFixed(2),
       });
     });
   }

@@ -1,6 +1,7 @@
 -General-
 Ensure color schema works
 Info button
+Figure out why material-ui causes app to crash in Jest
 
 -Maps-
 

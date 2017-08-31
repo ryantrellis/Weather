@@ -1,16 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import RaisedButton from 'material-ui/RaisedButton';
 import CircularProgress from 'material-ui/CircularProgress';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
+import muiThemeable from 'material-ui/styles/muiThemeable';
+import RainDataGraph from './RainDataGraph';
 
-import './RainData.css';
-
-function RainData({ returnToMap, isFetching, locationData, error }) {
+function RainData({ returnToMap, isFetching, locationData, error, muiTheme }) {
+  const { fontFamily, palette } = muiTheme;
+  const { canvasColor, textColor } = palette;
   let content;
   if (error) {
     content = (
-      <div>
-        <h1>
+      <div style={{ textAlign: 'center', width: '100%' }} >
+        <h1 style={{ color: textColor, fontFamily }}>
           Error: {error}
         </h1>
       </div>
@@ -32,14 +35,28 @@ function RainData({ returnToMap, isFetching, locationData, error }) {
     );
   } else {
     content = (
-      <div>
-        {locationData.city}
-        <RaisedButton label="Default" onClick={returnToMap} />
+      <div style={{ height: '100%', width: '100%', display: 'flex', flexDirection: 'column' }}>
+        <h2 style={{ textAlign: 'center', fontFamily }}>{locationData.city}</h2>
+        <RainDataGraph />
       </div>
     );
   }
+
   return (
-    <div className="RainData">
+    <div
+      style={{
+        display: 'flex',
+        zIndex: 2,
+        height: '100%',
+        width: '100%',
+        background: canvasColor,
+      }}
+    >
+      <div style={{ position: 'fixed', margin: '10px', zIndex: 10 }}>
+        <FloatingActionButton label="Default" onClick={returnToMap}>
+          <ArrowBack />
+        </FloatingActionButton>
+      </div>
       {content}
     </div>
   );
@@ -53,6 +70,11 @@ RainData.propTypes = {
     hourlyData: PropTypes.object.isRequired,
   }),
   error: PropTypes.string,
+  muiTheme: PropTypes.shape({
+    spacing: PropTypes.object,
+    fontFamily: PropTypes.string,
+    palette: PropTypes.object,
+  }).isRequired,
 };
 
-export default RainData;
+export default muiThemeable()(RainData);

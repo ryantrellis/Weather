@@ -15,3 +15,8 @@
     - Individual data points will be easy to see by mousing over the individual points on desktop.
     - Maybe on mobile the users can press the data point, and a header will appear with the point data.
     - Alternatively, there could be one tab for the graph and another for the data in a table.
+- Using Moment.js to handle dates because it makes the code much more readable.
+- Chose plotly.js for graphing because it offers a lot of cool feature with minimal configuration.  I found the zooming controls on mobile were really intuitive.
+- Using inline CSS for styling components that only appear in one place.
+- If a component appears in multiple places, I use a css file and give the component a class.
+- Also use a css file for styling the google maps elements because the example they provide uses a css file.

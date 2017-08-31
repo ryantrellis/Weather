@@ -86,7 +86,7 @@ class Map extends Component {
     return (
       <div style={{ height: '100%' }}>
         <input id="pac-input" className="controls" type="text" placeholder="Search Box" />
-        <div className="Map" ref={(mapDiv) => { this.mapDiv = mapDiv; }} />
+        <div style={{ height: '100%', zIndex: 1 }} ref={(mapDiv) => { this.mapDiv = mapDiv; }} />
       </div>
     );
   }

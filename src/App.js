@@ -32,10 +32,11 @@ class App extends Component {
     };
 
     this.handleDataOpen = (location) => {
+      const { pathname } = window.location;
       history.replaceState(
         null,
         null,
-        `#${location.lat.toFixed(2)},${location.lng.toFixed(2)}`);
+        `${pathname}#${location.lat.toFixed(2)},${location.lng.toFixed(2)}`);
       this.setState({
         viewingData: true,
         location,

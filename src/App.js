@@ -18,42 +18,17 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    let viewingData = false;
-    let infoOpen = true;
-    let lat = NaN;
-    let lng = NaN;
-
-    // If a coordinate is in the url don't open info
-    // and open the data page
-    const { hash } = window.location;
-    if (hash) {
-      const link = hash.split('#').pop();
-      const re = /(-?\d+.?\d*),(-?\d+.?\d*)/;
-      const matches = link.match(re);
-      if (matches && matches.length === 3) {
-        // The url has a coordinate in it
-        const [, reqLatS, reqLngS] = matches;
-
-        const reqLatN = Number(reqLatS);
-        const reqLngN = Number(reqLngS);
-        if (reqLatN >= 0 && reqLatN <= 180 &&
-          reqLngN >= -90 && reqLngN <= 90) {
-          // The coordinates are valid
-          lat = reqLatN;
-          lng = reqLngN;
-          infoOpen = false;
-          viewingData = true;
-        }
-      }
-    }
-
     this.state = {
-      viewingData,
+      viewingData: false,
       location: {
-        lat,
-        lng,
+        lat: NaN,
+        lng: NaN,
       },
-      infoOpen,
+      mapCenter: {
+        lat: 33.7490,
+        lng: -84.3880,
+      },
+      infoOpen: false,
     };
 
     this.handleDataOpen = (location) => {
@@ -61,7 +36,12 @@ class App extends Component {
         null,
         null,
         `#${location.lat.toFixed(2)},${location.lng.toFixed(2)}`);
-      this.setState({ viewingData: true, location });
+      this.setState({
+        viewingData: true,
+        location,
+        mapCenter: location,
+        infoOpen: false,
+      });
     };
 
     this.handleDataClose = () => {
@@ -79,6 +59,32 @@ class App extends Component {
     this.handleInfoClose = () => {
       this.setState({ infoOpen: false });
     };
+  }
+
+  componentWillMount() {
+    // Handle coordinates in url
+    const { hash } = window.location;
+    if (hash) {
+      const link = hash.split('#').pop();
+      const re = /(-?\d+.?\d*),(-?\d+.?\d*)/;
+      const matches = link.match(re);
+      if (matches && matches.length === 3) {
+        // The url has a coordinate in it
+        const [, reqLatS, reqLngS] = matches;
+
+        const reqLatN = Number(reqLatS);
+        const reqLngN = Number(reqLngS);
+        if (reqLatN >= 0 && reqLatN <= 180 &&
+          reqLngN >= -90 && reqLngN <= 90) {
+          // The coordinates are valid
+          this.handleDataOpen({ lat: reqLatN, lng: reqLngN });
+          return;
+        }
+      }
+    }
+
+    // Otherwise open info
+    this.setState({ infoOpen: true });
   }
 
   render() {
@@ -120,7 +126,10 @@ class App extends Component {
             bottom: '0px',
           }}
           >
-            <Map locationPicked={this.handleDataOpen} />
+            <Map
+              locationPicked={this.handleDataOpen}
+              center={this.state.mapCenter}
+            />
           </div>
           <div style={{
             position: 'fixed',

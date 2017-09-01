@@ -3,14 +3,16 @@ import PropTypes from 'prop-types';
 
 import './Map.css';
 
+let map;
+
 class Map extends Component {
   componentDidMount() {
-    const { locationPicked } = this.props;
+    const { locationPicked, center } = this.props;
 
     /* Load Map */
     const { maps } = window.google;
-    const map = new maps.Map(this.mapDiv, {
-      center: { lat: 33.7490, lng: -84.3880 },
+    map = new maps.Map(this.mapDiv, {
+      center,
       zoom: 12,
     });
 
@@ -84,6 +86,11 @@ class Map extends Component {
     });
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { center } = nextProps;
+    map.setCenter(center);
+  }
+
   render() {
     return (
       <div style={{ height: '100%' }}>
@@ -104,6 +111,10 @@ class Map extends Component {
 
 Map.propTypes = {
   locationPicked: PropTypes.func.isRequired,
+  center: PropTypes.shape({
+    lat: PropTypes.number.isRequired,
+    lng: PropTypes.number.isRequired,
+  }).isRequired,
 };
 
 export default Map;

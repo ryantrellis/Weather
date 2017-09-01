@@ -1,6 +1,6 @@
 # Rainfall Monitoring App
 
-**Design decisions**
+**Some Notes on Design Decisions**
 
 - Create-react-app gives me a nice launching point for my development enviroment.  Test running, live reload, babel, webpack, linting all ready to go.
 - Using AirBnb linting rules because they are very comprehensive.
@@ -13,8 +13,6 @@
   - When a user selects a location on the map, a full screen div will appear with the rain data.  There will be a back button to return to the map.
     - This design will work well for desktop and mobile with little effort.
     - Individual data points will be easy to see by mousing over the individual points on desktop.
-    - Maybe on mobile the users can press the data point, and a header will appear with the point data.
-    - Alternatively, there could be one tab for the graph and another for the data in a table.
 - Using Moment.js to handle dates because it makes the code much more readable.
 - Chose plotly.js for graphing because it offers a lot of cool feature with minimal configuration.  I found the zooming controls on mobile were really intuitive.
 - Using inline CSS for styling components that only appear in one place.

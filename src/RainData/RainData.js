@@ -87,7 +87,7 @@ class RainData extends Component {
               left: (size / 2) * -1,
               top: '30%',
             }}
-          />;
+          />
         </div>
       );
     } else {

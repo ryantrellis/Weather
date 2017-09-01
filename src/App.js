@@ -46,10 +46,11 @@ class App extends Component {
     };
 
     this.handleDataClose = () => {
+      const { pathname } = window.location;
       history.replaceState(
         null,
         null,
-        '/');
+        pathname);
       this.setState({ viewingData: false });
     };
 

@@ -24,6 +24,8 @@ class RainDataGraph extends Component {
   constructor(props) {
     super(props);
 
+    const titlefontFamily = 'Roboto, sans-serif';
+
     this.lineFormat = {
       type: 'scatter',
       mode: 'lines+markers',
@@ -64,7 +66,7 @@ class RainDataGraph extends Component {
           x0: today,
           x1: today,
           yref: 'paper',
-          y0: 0.05, // Stop at x axis
+          y0: 0.065, // Stop at x axis
           y1: 1,
           line: {
             color: 'grey',
@@ -72,12 +74,31 @@ class RainDataGraph extends Component {
             dash: 'dot',
           },
         }],
+        annotations: [{
+          x: today,
+          yref: 'paper',
+          y: 1.07,
+          text: 'Today',
+          font: {
+            family: titlefontFamily,
+            size: 16,
+            color: '#000000',
+          },
+          align: 'center',
+          opacity: 0.8,
+          showarrow: false,
+        }],
         margin: {
           l: 64,
           r: 0,
           b: 50,
           t: 100,
           pad: 4,
+        },
+        titlefont: {
+          family: titlefontFamily,
+          size: 28,
+          color: '#000000',
         },
         autosize: false,
       };

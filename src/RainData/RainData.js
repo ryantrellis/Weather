@@ -87,12 +87,6 @@ class RainData extends Component {
     } else {
       content = (
         <RainDataGraph
-          style={{
-            height: '100%',
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-          }}
           hourlyData={locationData.hourlyData}
           city={locationData.city}
           unitInfo={getUnitInfo(this.state.unit)}
@@ -139,6 +133,9 @@ class RainData extends Component {
         </div>
         <div style={{
           flex: '1 1 auto',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
         }}
         >
           {content}

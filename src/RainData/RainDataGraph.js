@@ -46,7 +46,9 @@ class RainDataGraph extends Component {
     };
 
     this.resizePlot = () => {
-      Plotly.Plots.resize(this.graphDiv);
+      const height = this.graphDiv.parentElement.offsetHeight;
+      const width = this.graphDiv.parentElement.offsetWidth;
+      Plotly.relayout(this.graphDiv, { height, width });
     };
 
     this.initPlotLayout = () => {
@@ -77,6 +79,7 @@ class RainDataGraph extends Component {
           t: 100,
           pad: 4,
         },
+        autosize: false,
       };
     };
 
@@ -93,6 +96,7 @@ class RainDataGraph extends Component {
     };
 
     this.updatePlot = (nextProps) => {
+      this.resizePlot();
       Plotly.deleteTraces(this.graphDiv, 0);
       Plotly.relayout(this.graphDiv, this.getPlotLayout(nextProps));
       Plotly.addTraces(this.graphDiv, [this.getData(nextProps)]);
@@ -132,7 +136,7 @@ class RainDataGraph extends Component {
     return (
       <div
         ref={(graphDiv) => { this.graphDiv = graphDiv; }}
-        style={{ height: '100%', width: '100%' }}
+        id="plotlyGraphDiv"
       />
     );
   }

@@ -8,6 +8,7 @@ import './App.css';
 import RainData from './RainData/RainDataContainer';
 import Map from './Map/Map';
 import getTheme from './theme';
+import InfoDialog from './Info/InfoDialog';
 
 /*
   Controls which screen is displaying (map or rain data)
@@ -22,30 +23,34 @@ class App extends Component {
         lat: 0,
         lng: 0,
       },
+      infoOpen: true,
     };
 
-    this.viewData = (location) => {
-      this.setState(() => ({
-        viewingData: true,
-        location,
-      }));
+    this.handleDataOpen = (location) => {
+      this.setState({ viewingData: true, location });
     };
 
-    this.viewMap = () => {
-      this.setState(() => ({
-        viewingData: false,
-      }));
+    this.handleDataClose = () => {
+      this.setState({ viewingData: false });
+    };
+
+    this.handleInfoOpen = () => {
+      this.setState({ infoOpen: true });
+    };
+
+    this.handleInfoClose = () => {
+      this.setState({ infoOpen: false });
     };
   }
 
   render() {
-    const { viewingData } = this.state;
+    const { viewingData, infoOpen } = this.state;
     let dataView = '';
     if (viewingData) {
       dataView = (
         <div className="Screen">
           <RainData
-            returnToMap={this.viewMap}
+            returnToMap={this.handleDataClose}
             location={this.state.location}
           />
         </div>
@@ -57,10 +62,15 @@ class App extends Component {
           <AppBar
             title="Rainfall Explorer"
             showMenuIconButton={false}
-            iconElementRight={<IconButton><InfoOutline /></IconButton>}
+            iconElementRight={
+              <IconButton onClick={this.handleInfoOpen}>
+                <InfoOutline />
+              </IconButton>
+            }
           />
+          <InfoDialog handleClose={this.handleInfoClose} open={infoOpen} />
           <div className="Screen">
-            <Map locationPicked={this.viewData} />
+            <Map locationPicked={this.handleDataOpen} />
           </div>
           {dataView}
         </div>

@@ -145,13 +145,14 @@ function fetchRainData(coordinates) {
 export function getCoordinateIndex(coordinates) {
   // Used to access data for a coordinate pair
   // Google maps clamps all values to the legal range
-  let { lat } = coordinates;
-  const { lng } = coordinates;
+  let { lat, lng } = coordinates;
 
-  // Latitude is -90 -> 90, so make positive
+  // Lat is -90 -> 90, lng is -180->180
+  // so make positive (Don't have to deal with - sign)
   lat += 90;
+  lng += 180;
 
-  // Both are now 0 -> 180
+  // Both are now in range 0 -> 360
   // Make sure both are in xxx.xx format
   function fc(x) {
     const pad = 2;

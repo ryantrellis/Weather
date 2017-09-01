@@ -76,8 +76,8 @@ class App extends Component {
 
         const reqLatN = Number(reqLatS);
         const reqLngN = Number(reqLngS);
-        if (reqLatN >= 0 && reqLatN <= 180 &&
-          reqLngN >= -90 && reqLngN <= 90) {
+        if (reqLatN >= -90 && reqLatN <= 90 &&
+          reqLngN >= -180 && reqLngN <= 180) {
           // The coordinates are valid
           this.handleDataOpen({ lat: reqLatN, lng: reqLngN });
           return;

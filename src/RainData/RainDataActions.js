@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { mergeWith } from 'lodash';
+import { mergeWith, padStart } from 'lodash';
 
 export const REQUEST_RAIN_DATA = 'REQUEST_RAIN_DATA';
 function requestRainData(coordinates) {
@@ -123,7 +123,7 @@ function fetchHistory(coordinates) {
 function fetchRainData(coordinates) {
   return (dispatch) => {
     dispatch(requestRainData(coordinates));
-    Promise.all([fetchForecast(coordinates), fetchHistory(coordinates)])
+    return Promise.all([fetchForecast(coordinates), fetchHistory(coordinates)])
       .then(([forecast, history]) =>
         dispatch(receiveRainData(coordinates, {
           city: forecast.city,
@@ -142,8 +142,21 @@ function hoursBetween(date1, date2) {
 
 export function getCoordinateIndex(coordinates) {
   // Used to access data for a coordinate pair
-  const { lat, lng } = coordinates;
-  return lat.toString() + lng.toString();
+  // Google maps clamps all values to the legal range
+  let { lat } = coordinates;
+  const { lng } = coordinates;
+
+  // Latitude is -90 -> 90, so make positive
+  lat += 90;
+
+  // Both are now 0 -> 180
+  // Make sure both are in xxx.xx format
+  function fc(x) {
+    const pad = 2;
+    return padStart(x.toFixed(pad), pad + 4, '0');
+  }
+  const index = fc(lat) + fc(lng);
+  return index;
 }
 
 function shouldFetchRainData(state, coordinates) {

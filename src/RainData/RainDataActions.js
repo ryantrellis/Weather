@@ -54,9 +54,23 @@ function fetchForecast(coordinates) {
     .then(response => response.json())
     .then((json) => {
       const data = {};
-      data.city = `${json.city.name}, ${json.city.country}`;
+
+      // Build city name if location has one
+      data.city = '';
+      if (json.city.name) {
+        data.city += json.city.name;
+      }
+      if (json.city.country) {
+        if (json.city) {
+          data.city += `, ${json.city.country}`;
+        } else {
+          data.city = json.city.country;
+        }
+      }
+
       let o = {};
       json.list.forEach((e) => {
+        if (!e.rain) return;
         const date = moment(e.dt * 1000);
         const precip = e.rain['3h'] || 0;
         // mergeWith sums the daily values

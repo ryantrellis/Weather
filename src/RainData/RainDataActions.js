@@ -42,6 +42,7 @@ function mergePrecip(a, b) {
 
 function fetchForecast(coordinates) {
   const { lat, lng } = coordinates;
+  // eslint-disable-next-line max-len
   const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lng}&appid=4a9392bb837a99ef8b64347ed48199ee`;
   return fetch(url)
     .then((response) => {
@@ -58,7 +59,7 @@ function fetchForecast(coordinates) {
       json.list.forEach((e) => {
         const date = moment(e.dt * 1000);
         const precip = e.rain['3h'] || 0;
-        // mergeWith adds the values if we already had some rain on the day
+        // mergeWith sums the daily values
         o = mergeWith(o, { [date.format('YYYYMMDD')]: precip }, mergePrecip);
       });
       data.hourlyData = o;
@@ -72,6 +73,7 @@ function fetchHistory(coordinates) {
   const endDate = moment();
   const sd = startDate.format('YYYY-MM-DD');
   const ed = endDate.format('YYYY-MM-DD');
+  // eslint-disable-next-line max-len
   const url = `https://api.worldweatheronline.com/premium/v1/past-weather.ashx?q=${lat},${lng}&date=${sd}&enddate=${ed}&key=7726106ec24145b790701202173108`;
   return fetch(url)
     .then((response) => {
@@ -81,22 +83,22 @@ function fetchHistory(coordinates) {
       return response;
     })
     .then(response => response.text())
-    .then(response => (new window.DOMParser()).parseFromString(response, 'text/xml'))
+    .then(response => (new DOMParser()).parseFromString(response, 'text/xml'))
     .then((xml) => {
-      const days = [...xml.getElementsByTagName('weather')];
-
-      function nodeValue(node) {
-        return node.childNodes[0].nodeValue;
+      function getFirstValueByTag(elem, tag) {
+        return elem.getElementsByTagName(tag)[0].childNodes[0].nodeValue;
       }
 
       // The object that will hold the parsed data
       let o = {};
+
+      const days = [...xml.getElementsByTagName('weather')];
       days.forEach((dayElem) => {
-        const date = moment(nodeValue(dayElem.getElementsByTagName('date')[0]));
+        const date = moment(getFirstValueByTag(dayElem, 'date'));
         const hourElems = [...dayElem.getElementsByTagName('hourly')];
         hourElems.forEach((hourElem) => {
-          const precip = Number(nodeValue(hourElem.getElementsByTagName('precipMM')[0]));
-          // mergeWith adds the values if we already had some rain on the day
+          const precip = Number(getFirstValueByTag(hourElem, 'precipMM'));
+          // mergeWith sums the daily values
           o = mergeWith(o, { [date.format('YYYYMMDD')]: precip }, mergePrecip);
         });
       });
@@ -111,7 +113,8 @@ function fetchRainData(coordinates) {
       .then(([forecast, history]) =>
         dispatch(receiveRainData(coordinates, {
           city: forecast.city,
-          hourlyData: mergeWith(forecast.hourlyData, history.hourlyData, mergePrecip),
+          hourlyData: mergeWith(forecast.hourlyData, history.hourlyData,
+            mergePrecip),
         })))
       .catch(err => dispatch(errorRainData(coordinates, err)));
   };

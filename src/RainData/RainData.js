@@ -49,7 +49,13 @@ class RainData extends Component {
   }
 
   render() {
-    const { returnToMap, isFetching, locationData, error, muiTheme } = this.props;
+    const {
+      returnToMap,
+      isFetching,
+      locationData,
+      error,
+      muiTheme,
+    } = this.props;
     const { fontFamily, palette } = muiTheme;
     const { canvasColor, textColor } = palette;
     let content;
@@ -79,7 +85,12 @@ class RainData extends Component {
     } else {
       content = (
         <RainDataGraph
-          style={{ height: '100%', width: '100%', display: 'flex', flexDirection: 'column' }}
+          style={{
+            height: '100%',
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
           hourlyData={locationData.hourlyData}
           city={locationData.city}
           unitInfo={getUnitInfo(this.state.unit)}
@@ -90,20 +101,31 @@ class RainData extends Component {
     return (
       <div
         style={{
-          display: 'flex',
           zIndex: 2,
           height: '100%',
           width: '100%',
           background: canvasColor,
         }}
       >
-        <div style={{ position: 'fixed', margin: '10px', zIndex: 10 }}>
-          <FloatingActionButton label="Default" onClick={returnToMap}>
+        <div style={{
+          position: 'fixed',
+          margin: '10px',
+          zIndex: 10,
+          display: 'flex',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          paddingLeft: '10px',
+        }}
+        >
+          <FloatingActionButton
+            label="Default"
+            onClick={returnToMap}
+          >
             <ArrowBack />
           </FloatingActionButton>
           <SelectField
             floatingLabelText="Unit"
-            style={{ paddingLeft: '20px', paddingTop: '10px', width: '85px' }}
+            style={{ paddingLeft: '30px', width: '85px' }}
             value={this.state.unit}
             onChange={this.updateUnit}
           >

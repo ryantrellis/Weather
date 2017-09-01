@@ -50,6 +50,7 @@ class RainDataGraph extends Component {
     };
 
     this.initPlotLayout = () => {
+      // Returns the static layout settings
       const today = moment()
         .hour(0)
         .minute(0)
@@ -72,7 +73,7 @@ class RainDataGraph extends Component {
         margin: {
           l: 64,
           r: 0,
-          b: 0,
+          b: 50,
           t: 100,
           pad: 4,
         },
@@ -80,6 +81,7 @@ class RainDataGraph extends Component {
     };
 
     this.getPlotLayout = (nextProps) => {
+      // Returns the dynamic layout settings
       const { city, unitInfo } = nextProps;
       return {
         title: city ? `Rainfall in ${city}` : 'Rainfall',
@@ -98,7 +100,8 @@ class RainDataGraph extends Component {
   }
 
   componentDidMount() {
-    Plotly.newPlot(this.graphDiv, [this.getData(this.props)], this.initPlotLayout());
+    Plotly.newPlot(this.graphDiv,
+      [this.getData(this.props)], this.initPlotLayout());
     // Update immediatly it to get axis to scale properly
     this.updatePlot(this.props);
     window.addEventListener('resize', this.resizePlot);

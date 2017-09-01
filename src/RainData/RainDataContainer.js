@@ -27,8 +27,8 @@ RainDataContainer.propTypes = {
   getRainData: PropTypes.func.isRequired,
   returnToMap: PropTypes.func.isRequired,
   location: PropTypes.shape({
-    lat: PropTypes.string.isRequired,
-    lng: PropTypes.string.isRequired,
+    lat: PropTypes.number.isRequired,
+    lng: PropTypes.number.isRequired,
   }).isRequired,
   locationData: PropTypes.shape({
     city: PropTypes.string.isRequired,

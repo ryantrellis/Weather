@@ -1,11 +1,6 @@
 -General-
 Review color scheme
-Figure out why material-ui causes app to crash in Jest
-
--Maps-
+Ensure code is well documented
 
 -RainData-
-Figure out how to balance out rainfall on the current time
 Ensure API Keys won't run out
-
-Test Actions and Reducers

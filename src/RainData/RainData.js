@@ -59,6 +59,7 @@ class RainData extends Component {
     const { fontFamily, palette } = muiTheme;
     const { canvasColor, textColor } = palette;
     let content;
+    const unitVisiblity = {};
     if (error) {
       content = (
         <div style={{ textAlign: 'center', width: '100%' }} >
@@ -69,6 +70,7 @@ class RainData extends Component {
       );
     } else if (isFetching) {
       const size = 120;
+      unitVisiblity.display = 'none';
       content = (
         <div style={{ position: 'relative', height: '100%', width: '100%' }}>
           <CircularProgress
@@ -105,16 +107,18 @@ class RainData extends Component {
           height: '100%',
           width: '100%',
           background: canvasColor,
+          display: 'flex',
+          flexDirection: 'column',
         }}
       >
         <div style={{
-          position: 'fixed',
           margin: '10px',
           zIndex: 10,
           display: 'flex',
           alignItems: 'center',
           flexWrap: 'wrap',
           paddingLeft: '10px',
+          flex: '0 1 auto',
         }}
         >
           <FloatingActionButton
@@ -125,7 +129,7 @@ class RainData extends Component {
           </FloatingActionButton>
           <SelectField
             floatingLabelText="Unit"
-            style={{ paddingLeft: '30px', width: '85px' }}
+            style={{ paddingLeft: '30px', width: '85px', ...unitVisiblity }}
             value={this.state.unit}
             onChange={this.updateUnit}
           >
@@ -133,7 +137,12 @@ class RainData extends Component {
             <MenuItem value={1} primaryText="in" />
           </SelectField>
         </div>
-        {content}
+        <div style={{
+          flex: '1 1 auto',
+        }}
+        >
+          {content}
+        </div>
       </div>
     );
   }

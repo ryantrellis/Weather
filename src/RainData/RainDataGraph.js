@@ -101,7 +101,20 @@ class RainDataGraph extends Component {
 
   componentDidMount() {
     Plotly.newPlot(this.graphDiv,
-      [this.getData(this.props)], this.initPlotLayout());
+      [this.getData(this.props)],
+      this.initPlotLayout(),
+      {
+        displaylogo: false,
+        modeBarButtonsToRemove: [
+          'sendDataToCloud',
+          'select2d',
+          'lasso2d',
+          'resetScale2d',
+          'hoverClosestCartesian',
+          'hoverCompareCartesian',
+          'toggleSpikelines',
+        ],
+      });
     // Update immediatly it to get axis to scale properly
     this.updatePlot(this.props);
     window.addEventListener('resize', this.resizePlot);

@@ -116,7 +116,7 @@ class RainData extends Component {
       >
         {/* This div contains back button and unit changer */}
         <div style={{
-          margin: '10px',
+          marginTop: '10px',
           zIndex: 10,
           display: 'flex',
           alignItems: 'center',

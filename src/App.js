@@ -46,20 +46,16 @@ class App extends Component {
   render() {
     const { viewingData, infoOpen } = this.state;
 
-    // The data div sits on top of the map, so the map is not
-    // reloaded every time the user backs out
-    let dataView = '';
+    let rainDataDisplay = 'none';
+    let appBarDisplay = 'flex';
+    let appBarOffset = 64;
     if (viewingData) {
-      // The user clicked on a location, so genererate the graph
-      // and add it to the screen
-      dataView = (
-        <div className="Screen">
-          <RainData
-            returnToMap={this.handleDataClose}
-            location={this.state.location}
-          />
-        </div>
-      );
+      // Display rain data
+      rainDataDisplay = 'inline';
+
+      // Don't display app bar
+      appBarDisplay = 'none';
+      appBarOffset = 0;
     }
 
     return (
@@ -68,7 +64,9 @@ class App extends Component {
           <AppBar
             title="Rainfall Explorer"
             showMenuIconButton={false}
-
+            style={{
+              display: appBarDisplay,
+            }}
             // Info button
             iconElementRight={
               <IconButton onClick={this.handleInfoOpen}>
@@ -77,11 +75,28 @@ class App extends Component {
             }
           />
           <InfoDialog handleClose={this.handleInfoClose} open={infoOpen} />
-          <div className="Screen">
+          <div style={{
+            position: 'fixed',
+            width: '100vw',
+            top: `${appBarOffset}px`,
+            bottom: '0px',
+          }}
+          >
             <Map locationPicked={this.handleDataOpen} />
           </div>
-          {/* dataView is an empty string or the graph div */}
-          { dataView }
+          <div style={{
+            position: 'fixed',
+            width: '100vw',
+            top: `${appBarOffset}px`,
+            bottom: '0px',
+            display: rainDataDisplay,
+          }}
+          >
+            <RainData
+              returnToMap={this.handleDataClose}
+              location={this.state.location}
+            />
+          </div>
         </div>
       </MuiThemeProvider>
     );

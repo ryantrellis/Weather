@@ -10,8 +10,8 @@ import fetchRainData, { getCoordinateIndex } from './RainDataActions';
 */
 
 class RainDataContainer extends Component {
-  componentDidMount() {
-    const { location, getRainData } = this.props;
+  componentWillReceiveProps(nextProps) {
+    const { location, getRainData } = nextProps;
     getRainData(location);
   }
 

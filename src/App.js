@@ -17,20 +17,58 @@ import InfoDialog from './Info/InfoDialog';
 class App extends Component {
   constructor(props) {
     super(props);
+
+    let viewingData = false;
+    let infoOpen = true;
+    let lat = NaN;
+    let lng = NaN;
+
+    // If a coordinate is in the url don't open info
+    // and open the data page
+    const { hash } = window.location;
+    if (hash) {
+      const link = hash.split('#').pop();
+      const re = /(-?\d+.?\d*),(-?\d+.?\d*)/;
+      const matches = link.match(re);
+      if (matches && matches.length === 3) {
+        // The url has a coordinate in it
+        const [, reqLatS, reqLngS] = matches;
+
+        const reqLatN = Number(reqLatS);
+        const reqLngN = Number(reqLngS);
+        if (reqLatN >= 0 && reqLatN <= 180 &&
+          reqLngN >= -90 && reqLngN <= 90) {
+          // The coordinates are valid
+          lat = reqLatN;
+          lng = reqLngN;
+          infoOpen = false;
+          viewingData = true;
+        }
+      }
+    }
+
     this.state = {
-      viewingData: false,
+      viewingData,
       location: {
-        lat: 0,
-        lng: 0,
+        lat,
+        lng,
       },
-      infoOpen: true,
+      infoOpen,
     };
 
     this.handleDataOpen = (location) => {
+      history.replaceState(
+        null,
+        null,
+        `#${location.lat.toFixed(2)},${location.lng.toFixed(2)}`);
       this.setState({ viewingData: true, location });
     };
 
     this.handleDataClose = () => {
+      history.replaceState(
+        null,
+        null,
+        '/');
       this.setState({ viewingData: false });
     };
 

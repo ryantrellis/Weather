@@ -162,6 +162,10 @@ export function getCoordinateIndex(coordinates) {
 }
 
 function shouldFetchRainData(state, coordinates) {
+  if (isNaN(coordinates.lat) || isNaN(coordinates.lng)) {
+    return false;
+  }
+
   const rainData = state.rainData[getCoordinateIndex(coordinates)];
   if (rainData) {
     if (rainData.isFetching) {

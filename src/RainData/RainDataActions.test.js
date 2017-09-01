@@ -55,14 +55,14 @@ describe('RainData actions', () => {
     describe('get coordinate index', () => {
       it('should work with an easy case', () => {
         expect(getCoordinateIndex({ lat: 12.34, lng: 56.78 }))
-          .toEqual('102.34056.78');
+          .toEqual('102.34236.78');
       });
       it('should force 2 decimal places for the coordinates', () => {
         expect(getCoordinateIndex({ lat: 10, lng: 100 }))
-          .toEqual('100.00100.00');
+          .toEqual('100.00280.00');
       });
       it('should pad the coordinates', () => {
-        expect(getCoordinateIndex({ lat: -90, lng: 0 }))
+        expect(getCoordinateIndex({ lat: -90, lng: -180 }))
           .toEqual('000.00000.00');
       });
     });
@@ -87,7 +87,7 @@ describe('RainData actions', () => {
 
     describe('fetchRainDataIfNeeded', () => {
       // Index of coordinates is 000.00000.00
-      const coordinates = { lat: -90, lng: 0 };
+      const coordinates = { lat: -90, lng: -180 };
 
       it('should not fetch if already fetching', () => {
         const store = mockStore({ rainData: {

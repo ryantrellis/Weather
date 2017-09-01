@@ -18,3 +18,4 @@
 - Using inline CSS for styling components that only appear in one place.
 - If a component appears in multiple places, I use a css file and give the component a class.
 - Also use a css file for styling the google maps elements because the example they provide uses a css file.
+- Added ability to link directly to a graph when viewing one because it seemed like a useful thing to have.

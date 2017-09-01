@@ -75,6 +75,8 @@ class Map extends Component {
 
     /* Event Handlers */
     map.addListener('click', ({ latLng }) => {
+      // Notifies the App component that a location was clicked
+      // Triggers draw of graph div
       locationPicked({
         lat: latLng.lat(),
         lng: latLng.lng(),

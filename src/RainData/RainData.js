@@ -9,6 +9,7 @@ import MenuItem from 'material-ui/MenuItem';
 
 import RainDataGraph from './RainDataGraph';
 
+// Unit to display graph in
 let defaultUnit = 0;
 function getUnitInfo(unit) {
   switch (unit) {
@@ -18,7 +19,6 @@ function getUnitInfo(unit) {
         text: 'mm',
       };
     }
-    // in
     case 1: {
       return {
         multiplyer: 0.0393701,
@@ -43,7 +43,7 @@ class RainData extends Component {
       this.setState({
         unit: value,
       });
-      // Remember user's choice when they close and reopen a rainData view
+      // Save users choice for when they close and reopen a rainData view
       defaultUnit = value;
     };
   }
@@ -58,9 +58,15 @@ class RainData extends Component {
     } = this.props;
     const { fontFamily, palette } = muiTheme;
     const { canvasColor, textColor } = palette;
+
+    // Unit changer should only be displayed if the graph is displayed
+    const unitVisiblity = { display: 'none' };
+
+    // Content can be a loading spinner, the graph, or an error message
     let content;
-    const unitVisiblity = {};
+
     if (error) {
+      // Display error message
       content = (
         <div style={{ textAlign: 'center', width: '100%' }} >
           <h1 style={{ color: textColor, fontFamily }}>
@@ -69,8 +75,8 @@ class RainData extends Component {
         </div>
       );
     } else if (isFetching) {
+      // Display spinner
       const size = 120;
-      unitVisiblity.display = 'none';
       content = (
         <div style={{ position: 'relative', height: '100%', width: '100%' }}>
           <CircularProgress
@@ -85,9 +91,11 @@ class RainData extends Component {
         </div>
       );
     } else {
+      // Display graph
+      unitVisiblity.display = 'inline';
       content = (
         <RainDataGraph
-          hourlyData={locationData.hourlyData}
+          dailyData={locationData.dailyData}
           city={locationData.city}
           unitInfo={getUnitInfo(this.state.unit)}
         />
@@ -95,6 +103,7 @@ class RainData extends Component {
     }
 
     return (
+      // This div contains (back button, unit changer) and graph
       <div
         style={{
           zIndex: 2,
@@ -105,6 +114,7 @@ class RainData extends Component {
           flexDirection: 'column',
         }}
       >
+        {/* This div contains back button and unit changer */}
         <div style={{
           margin: '10px',
           zIndex: 10,
@@ -115,12 +125,15 @@ class RainData extends Component {
           flex: '0 1 auto',
         }}
         >
+          {/* Back button */}
           <FloatingActionButton
             label="Default"
             onClick={returnToMap}
           >
             <ArrowBack />
           </FloatingActionButton>
+
+          {/* Unit Changer */}
           <SelectField
             floatingLabelText="Unit"
             style={{ paddingLeft: '30px', width: '85px', ...unitVisiblity }}
@@ -131,6 +144,8 @@ class RainData extends Component {
             <MenuItem value={1} primaryText="in" />
           </SelectField>
         </div>
+
+        {/* Graph / spinner / error */}
         <div style={{
           flex: '1 1 auto',
           display: 'flex',
@@ -149,8 +164,8 @@ RainData.propTypes = {
   returnToMap: PropTypes.func.isRequired,
   isFetching: PropTypes.bool.isRequired,
   locationData: PropTypes.shape({
-    city: PropTypes.string.isRequired,
-    hourlyData: PropTypes.object.isRequired,
+    city: PropTypes.string,
+    dailyData: PropTypes.object,
   }),
   error: PropTypes.string,
   muiTheme: PropTypes.shape({

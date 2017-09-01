@@ -5,10 +5,20 @@ import moment from 'moment';
 const Plotly = window.Plotly;
 
 function convertDataForPlotly(data, multiplyer) {
-  /* Schema in redux
+  /* 
+  Converts data into a format that plotly can handle
+
+  Data is stored in redux:
   {
     YYYYMMDD: Number
-  } */
+  }
+
+  Date for plotly:
+  {
+    x: [Number],
+    y: [Number]
+  }
+  */
   const o = { x: [], y: [] };
   Object.keys(data).forEach((key) => {
     const date = moment(key, 'YYYYMMDD');
@@ -26,6 +36,7 @@ class RainDataGraph extends Component {
 
     const titlefontFamily = 'Roboto, sans-serif';
 
+    // Format for lines connecting dots
     this.lineFormat = {
       type: 'scatter',
       mode: 'lines+markers',
@@ -39,28 +50,31 @@ class RainDataGraph extends Component {
     };
 
     this.getData = (nextProps) => {
-      const { hourlyData, unitInfo } = nextProps;
+      const { dailyData, unitInfo } = nextProps;
       return Object.assign(
         {},
-        convertDataForPlotly(hourlyData, unitInfo.multiplyer),
+        convertDataForPlotly(dailyData, unitInfo.multiplyer),
         this.lineFormat,
       );
     };
 
+    // Resizes plot to fill the div it is in
+    // Plotly's built in resizer does not like being in a flexbox
     this.resizePlot = () => {
       const height = this.graphDiv.parentElement.offsetHeight;
       const width = this.graphDiv.parentElement.offsetWidth;
       Plotly.relayout(this.graphDiv, { height, width });
     };
 
+    // Returns the static layout settings
     this.initPlotLayout = () => {
-      // Returns the static layout settings
       const today = moment()
         .hour(0)
         .minute(0)
         .second(0)
         .format();
       return {
+        // Line to show where today is
         shapes: [{
           type: 'line',
           x0: today,
@@ -74,6 +88,7 @@ class RainDataGraph extends Component {
             dash: 'dot',
           },
         }],
+        // Annotation above today line
         annotations: [{
           x: today,
           yref: 'paper',
@@ -104,8 +119,8 @@ class RainDataGraph extends Component {
       };
     };
 
+    // Returns the dynamic layout settings
     this.getPlotLayout = (nextProps) => {
-      // Returns the dynamic layout settings
       const { city, unitInfo } = nextProps;
       return {
         title: city ? `Rainfall in ${city}` : 'Rainfall',
@@ -140,12 +155,13 @@ class RainDataGraph extends Component {
           'toggleSpikelines',
         ],
       });
-    // Update immediatly it to get axis to scale properly
+    // Update immediatly it to scale properly
     this.updatePlot(this.props);
     window.addEventListener('resize', this.resizePlot);
   }
 
   componentWillReceiveProps(nextProps) {
+    // Units changed
     this.updatePlot(nextProps);
   }
 
@@ -164,7 +180,7 @@ class RainDataGraph extends Component {
 }
 
 RainDataGraph.propTypes = {
-  hourlyData: PropTypes.objectOf(PropTypes.number.isRequired).isRequired,
+  dailyData: PropTypes.objectOf(PropTypes.number.isRequired).isRequired,
   city: PropTypes.string.isRequired,
   unitInfo: PropTypes.shape({
     multiplyer: PropTypes.number.isRequired,

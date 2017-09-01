@@ -4,6 +4,11 @@ import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import * as Colors from 'material-ui/styles/colors';
 import { fade } from 'material-ui/utils/colorManipulator'
 
+/*
+  Theme used by material-UI
+  Theme properties are accesible in components via muiThemeable
+*/
+
 const getTheme = () => {
   let overwrites = {
     "palette": {

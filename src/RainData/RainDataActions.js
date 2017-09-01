@@ -28,16 +28,19 @@ function errorRainData(coordinates, error) {
   };
 }
 
-/* Schema for return result
-{
-  YYYYMMDD: Number
-} */
-
-function mergePrecip(a, b) {
-  if (a === undefined) {
-    return b;
+/*
+Data comes in in an hourly format, but we only want to display
+daily data.  Each data point is merged into an object which will
+ultimately contain the daily rainfall sum.  If there is no data yet
+for a value's day, it initializes that day.  If there is already
+data, it adds to that sum.
+The function is used by lodash's mergeWith.
+*/
+function mergePrecip(sum, val) {
+  if (sum === undefined) {
+    return val;
   }
-  return a + b;
+  return sum + val;
 }
 
 function fetchForecast(coordinates) {
@@ -68,7 +71,9 @@ function fetchForecast(coordinates) {
         }
       }
 
+      // The object that will hold the parsed data
       let o = {};
+
       json.list.forEach((e) => {
         if (!e.rain) return;
         const date = moment(e.dt * 1000);
@@ -76,17 +81,20 @@ function fetchForecast(coordinates) {
         // mergeWith sums the daily values
         o = mergeWith(o, { [date.format('YYYYMMDD')]: precip }, mergePrecip);
       });
-      data.hourlyData = o;
+      data.dailyData = o;
       return data;
     });
 }
 
 function fetchHistory(coordinates) {
   const { lat, lng } = coordinates;
+
+  // Create the range to use in the query
   const startDate = moment().add(-30, 'days');
   const endDate = moment();
   const sd = startDate.format('YYYY-MM-DD');
   const ed = endDate.format('YYYY-MM-DD');
+
   // eslint-disable-next-line max-len
   const url = `https://api.worldweatheronline.com/premium/v1/past-weather.ashx?q=${lat},${lng}&date=${sd}&enddate=${ed}&key=7726106ec24145b790701202173108`;
   return fetch(url)
@@ -116,7 +124,7 @@ function fetchHistory(coordinates) {
           o = mergeWith(o, { [date.format('YYYYMMDD')]: precip }, mergePrecip);
         });
       });
-      return { hourlyData: o };
+      return { dailyData: o };
     });
 }
 
@@ -127,17 +135,11 @@ function fetchRainData(coordinates) {
       .then(([forecast, history]) =>
         dispatch(receiveRainData(coordinates, {
           city: forecast.city,
-          hourlyData: mergeWith(forecast.hourlyData, history.hourlyData,
+          dailyData: mergeWith(forecast.dailyData, history.dailyData,
             mergePrecip),
         })))
       .catch(err => dispatch(errorRainData(coordinates, err)));
   };
-}
-
-function hoursBetween(date1, date2) {
-  const oneHour = 1000 * 60 * 60;
-  const differenceMs = date2 - date1;
-  return Math.abs(Math.round(differenceMs / oneHour));
 }
 
 export function getCoordinateIndex(coordinates) {
@@ -172,7 +174,9 @@ function shouldFetchRainData(state, coordinates) {
       return true;
     }
 
-    if (hoursBetween(Date.now(), rainData.receivedAt) > 0) {
+    const now = moment();
+    const then = moment(rainData.receivedAt);
+    if (now.diff(then, 'hours') > 1) {
       // The data is too old, so request the data again
       return true;
     }
@@ -183,6 +187,7 @@ function shouldFetchRainData(state, coordinates) {
   }
 }
 
+// Returns cached data if we have it, otherwise sends query
 export default function fetchRainDataIfNeeded(coordinates) {
   return (dispatch, getState) => {
     if (shouldFetchRainData(getState(), coordinates)) {

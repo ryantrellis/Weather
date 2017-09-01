@@ -86,7 +86,7 @@ describe('RainData actions', () => {
     });
 
     describe('fetchRainDataIfNeeded', () => {
-      // Index is 000.00000.00
+      // Index of coordinates is 000.00000.00
       const coordinates = { lat: -90, lng: 0 };
 
       it('should not fetch if already fetching', () => {

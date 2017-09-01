@@ -14,10 +14,9 @@ rainData: {
     recievedAt: Date,
     data: {
       city: string,
-      forecast: [{
-        time: Date,
-        rain: Number
-      }],
+      dailyData: {
+        YYYYMMDD: Number,
+      },
     },
     error: string
   }

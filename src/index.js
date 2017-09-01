@@ -5,11 +5,11 @@ import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 
-import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import reducers from './reducers';
 
+// Expose roboto font
 require('typeface-roboto');
 
 const loggerMiddleware = createLogger();

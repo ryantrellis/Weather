@@ -3,6 +3,10 @@ import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
 
+/*
+  Displayed on page load and when info button is pressed
+*/
+
 function InfoDialog(props) {
   const { handleClose, open } = props;
   const actions = [

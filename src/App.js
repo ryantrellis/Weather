@@ -45,8 +45,13 @@ class App extends Component {
 
   render() {
     const { viewingData, infoOpen } = this.state;
+
+    // The data div sits on top of the map, so the map is not
+    // reloaded every time the user backs out
     let dataView = '';
     if (viewingData) {
+      // The user clicked on a location, so genererate the graph
+      // and add it to the screen
       dataView = (
         <div className="Screen">
           <RainData
@@ -56,12 +61,15 @@ class App extends Component {
         </div>
       );
     }
+
     return (
       <MuiThemeProvider muiTheme={getTheme()}>
         <div className="App">
           <AppBar
             title="Rainfall Explorer"
             showMenuIconButton={false}
+
+            // Info button
             iconElementRight={
               <IconButton onClick={this.handleInfoOpen}>
                 <InfoOutline />
@@ -72,7 +80,8 @@ class App extends Component {
           <div className="Screen">
             <Map locationPicked={this.handleDataOpen} />
           </div>
-          {dataView}
+          {/* dataView is an empty string or the graph div */}
+          { dataView }
         </div>
       </MuiThemeProvider>
     );

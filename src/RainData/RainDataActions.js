@@ -46,7 +46,7 @@ function mergePrecip(sum, val) {
 function fetchForecast(coordinates) {
   const { lat, lng } = coordinates;
   // eslint-disable-next-line max-len
-  const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lng}&appid=4a9392bb837a99ef8b64347ed48199ee`;
+  const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lng}&appid=ff5be5ca17e1b2aeb2a64a9f6d7731f5`;
   return fetch(url)
     .then((response) => {
       if (!response.ok) {
@@ -96,7 +96,7 @@ function fetchHistory(coordinates) {
   const ed = endDate.format('YYYY-MM-DD');
 
   // eslint-disable-next-line max-len
-  const url = `https://api.worldweatheronline.com/premium/v1/past-weather.ashx?q=${lat},${lng}&date=${sd}&enddate=${ed}&key=7726106ec24145b790701202173108`;
+  const url = `https://api.worldweatheronline.com/premium/v1/past-weather.ashx?q=${lat},${lng}&date=${sd}&enddate=${ed}&key=ff5be5ca17e1b2aeb2a64a9f6d7731f5`;
   return fetch(url)
     .then((response) => {
       if (!response.ok) {
